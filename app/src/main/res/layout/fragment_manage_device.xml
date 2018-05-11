@@ -1,0 +1,219 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:isScrollContainer="false">
+
+    <LinearLayout
+        android:id="@+id/manage_device_gadget_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/manage_device_gadget_name_edit_field"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:ems="10"
+            android:enabled="false"
+            android:gravity="start"
+            android:inputType="textNoSuggestions"
+            android:maxLength="17"
+            android:singleLine="true"
+            android:text="Gadget Name"
+            android:textColor="@color/light_gray"
+            android:textSize="40sp"/>
+
+        <TextView
+            android:id="@+id/manage_device_gdaget_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:text="Gadget Type"
+            android:textColor="@color/light_gray"
+            android:textSize="24sp"
+            android:visibility="visible"/>
+
+        <RelativeLayout
+            android:id="@+id/manage_device_battery_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/dashboard_battery_bar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/button_released"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="@string/label_batteryLevel"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/manage_device_battery_level_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/light_gray"
+                android:textSize="24sp"/>
+
+            <ProgressBar
+                android:id="@+id/manage_device_battery_bar"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="120dp"
+                android:layout_toStartOf="@id/manage_device_battery_level_value"
+                android:clickable="false"
+                android:max="100"
+                android:paddingStart="0dp"
+                android:progress="100"
+                android:progressDrawable="@drawable/battery_level"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/manage_device_gadget_logging_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/dashboard_gadget_logging"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/button_released"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="@string/label_gadgetLogging"
+                android:textSize="24sp"/>
+
+            <Switch
+                android:id="@+id/manage_device_switch_toggle_logger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:checked="true"
+                android:enabled="false"
+                android:textOff="@string/label_off"
+                android:textOn="@string/label_on"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:thumb="@drawable/customswitchselector"
+                android:track="@drawable/custom_track"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/manage_device_logging_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/dashboard_logging_interval"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/button_released"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="@string/label_loggingInterval"
+                android:textSize="24sp"/>
+
+            <Button
+                android:id="@+id/manage_device_button_logging_interval"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@color/sensirion_grey_light"
+                android:text="@string/label_interval_second_singular"
+                android:textColor="@color/light_gray"
+                android:textSize="24sp"
+                android:visibility="visible"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/manage_device_download_progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/dashboard_download_progress"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/button_released"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="@string/label_gadgetdownload"
+                android:textSize="24sp"/>
+
+            <ProgressBar
+                android:id="@+id/manage_device_download_progress_bar"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:clickable="false"
+                android:max="100"
+                android:paddingStart="10dp"
+                android:progress="100"
+                android:progressDrawable="@drawable/download_progress"/>
+
+            <TextView
+                android:id="@+id/manage_device_download_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/light_gray"
+                android:textSize="24sp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/manage_device_button_disconnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:background="@drawable/disconnect_button"
+        android:text="@string/label_disconnect"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
+
+</RelativeLayout>
