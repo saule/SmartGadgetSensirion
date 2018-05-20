@@ -1,10 +1,12 @@
 package com.sensirion.smartgadget.view.history;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -36,9 +38,12 @@ import com.sensirion.smartgadget.view.history.graph.HistoryPlot;
 import com.sensirion.smartgadget.view.history.type.HistoryIntervalType;
 import com.sensirion.smartgadget.view.history.type.HistoryUnitType;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindInt;
@@ -46,6 +51,15 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class HistoryFragment extends ParentFragment implements RHTSensorListener {
 
@@ -105,26 +119,103 @@ public class HistoryFragment extends ParentFragment implements RHTSensorListener
                 historyDb.getHistoryPoints(mIntervalSelected, selectedItems);
         Map<String, List<RHTDataPoint>> mResultValues = databaseResults.getResults();
 
-        for (String deviceName:mResultValues.keySet()){
-            String key = deviceName.toString();
-            System.out.println("device FFFFFFFFFF: " + key);
-            List<RHTDataPoint> dataPoints = mResultValues.get(deviceName);
-            printList(dataPoints);
-        }
-
-        Toast.makeText(mActivity.getApplicationContext(), "Your toast message.",
-                Toast.LENGTH_SHORT).show();
+        createExcelSheet(mResultValues);
+        Toast.makeText(mActivity.getApplicationContext(), "File has been downloaded",
+                Toast.LENGTH_LONG).show();
     }
 
-    private void printList(List<RHTDataPoint> mylist){
-        System.out.println("=============================================================================");
-        for (RHTDataPoint data:mylist){
-            System.out.println("dewPoint Celcius = "+data.getDewPointCelsius());
-            System.out.print("temp Celc "+data.getTemperatureCelsius());
-            System.out.print("heat index Celc "+data.getHeatIndexCelsius());
-            System.out.print("humidity % = " + data.getRelativeHumidity());
+    private void createExcelSheet(Map<String, List<RHTDataPoint>> mResultValues)
+    {
+        String Fnamexls="sensirion"+System.currentTimeMillis()+ ".xls";
+        File sdCard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+        File directory = new File (sdCard.getAbsolutePath() + "/sensirion");
+        directory.mkdirs();
+
+        File dir = new File("//sdcard//Download//");
+
+        File file = new File(dir, Fnamexls);
+
+
+        WorkbookSettings wbSettings = new WorkbookSettings();
+
+        wbSettings.setLocale(new Locale("en", "EN"));
+
+        WritableWorkbook workbook;
+        try {
+            workbook = Workbook.createWorkbook(file, wbSettings);
+
+            WritableSheet sheet = workbook.createSheet("resolution 10 min", 0);
+
+            for (String deviceName:mResultValues.keySet()){
+                String key = deviceName.toString();
+                Label label = new Label(0, 0, "sensirion data last 10 min resolution. device name: " + key );
+                Label label1 = new Label(0,1,"time (min?)");
+                Label label2 = new Label(1,1,"tem (C?)");
+                Label label3 = new Label(2,1,"humidity (%)");
+                Label label4 = new Label(3,1,"dew point (C?)");
+                Label label5 = new Label(4,1,"heat index(C?)");
+
+                try {
+                    sheet.addCell(label);
+                    sheet.addCell(label1);
+                    sheet.addCell(label2);
+                    sheet.addCell(label3);
+                    sheet.addCell(label4);
+                    sheet.addCell(label5);
+                } catch (RowsExceededException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (WriteException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                List<RHTDataPoint> dataPoints = mResultValues.get(deviceName);
+                printList(dataPoints, sheet);
+            }
+
+
+
+            workbook.write();
+            try {
+                workbook.close();
+            } catch (WriteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            //createExcel(excelSheet);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
         }
-        System.out.println("XXX=============================================================================");
+
+        DownloadManager downloadManager = (DownloadManager) mActivity.getSystemService(DOWNLOAD_SERVICE);
+
+        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, "text/plain",file.getAbsolutePath(),file.length(),true);
+
+    }
+
+    private void printList(List<RHTDataPoint> mylist, WritableSheet sheet) throws WriteException {
+
+        int row=2;
+        int colTime = 0;
+        int colTemp = 1;
+        int colHumidity = 2;
+        int coldewPoint = 3;
+        int colHeatIndex = 4;
+        for (RHTDataPoint data:mylist){
+            System.out.print(row + ": timestamp "+data.getTimestamp());
+            sheet.addCell(new Label(colTime,row,String.valueOf(data.getTimestamp())));
+            sheet.addCell(new Label(colTemp,row,String.valueOf(data.getTemperatureCelsius())));
+            sheet.addCell(new Label(colHumidity,row,String.valueOf(data.getRelativeHumidity())));
+            sheet.addCell(new Label(coldewPoint,row,String.valueOf(data.getDewPointCelsius())));
+            sheet.addCell(new Label(colHeatIndex,row,String.valueOf(data.getHeatIndexCelsius())));
+            row++;
+        }
+
     }
 
     @Override
