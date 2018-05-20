@@ -126,7 +126,7 @@ public class HistoryFragment extends ParentFragment implements RHTSensorListener
 
     private void createExcelSheet(Map<String, List<RHTDataPoint>> mResultValues)
     {
-        String Fnamexls="sensirion_testbranch"+System.currentTimeMillis()+ ".xls";
+        String Fnamexls="sensirion_testbranch111_445"+System.currentTimeMillis()+ ".xls";
         File sdCard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
         File directory = new File (sdCard.getAbsolutePath() + "/sensirion");
